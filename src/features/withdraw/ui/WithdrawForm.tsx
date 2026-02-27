@@ -11,8 +11,9 @@ import {
 
 const withdrawSchema = z.object({
   amount: z.coerce
-    .number({
-      invalid_type_error: "Amount is required",
+    .number()
+    .refine((value) => !Number.isNaN(value), {
+      message: "Amount is required",
     })
     .positive("Amount must be greater than 0"),
   destination: z
@@ -80,7 +81,7 @@ export default function WithdrawForm() {
     formState: { errors, isValid },
     watch,
   } = useForm<WithdrawFormValues>({
-    resolver: zodResolver(withdrawSchema),
+    resolver: zodResolver(withdrawSchema) as any,
     mode: "onChange",
     defaultValues: {
       amount: form.amount ?? undefined,

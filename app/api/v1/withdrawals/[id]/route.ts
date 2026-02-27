@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  // Simple mock status response for the requested withdrawal id.
+  const { id } = await params;
+
   return NextResponse.json({
-    id: params.id,
+    id,
     amount: 100,
     destination: "USDT wallet",
     status: "pending",
